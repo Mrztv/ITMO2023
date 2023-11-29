@@ -1,0 +1,115 @@
+@startuml
+'https://plantuml.com/class-diagram
+Pokemon <.. Digglet
+Pokemon <.. Shellos
+Pokemon <.. Furret
+Pokemon <.. Ambipom
+Digglet <.. Dugtrio
+Shellos <.. Gastrodon
+
+class Pokemon{
+    -Name
+    -Level
+    -Type
+    -Moves
+    +Pokemon()
+    +attack()
+}
+
+
+
+class Digglet{}
+
+class Dugtrio{}
+
+class Ambipom{}
+
+class Furret{}
+
+class Gastrodon{}
+
+class Shellos{}
+
+class Move{
+     -accuracy
+     -hits
+     -power
+     -priority
+     -type
+}
+
+class DamageMove{}
+Move <.. DamageMove
+
+class PhysicalMove
+DamageMove <.. PhysicalMove
+
+class SpecialMove{}
+DamageMove <.. SpecialMove
+
+class StatusMove{}
+Move <.. StatusMove
+
+
+
+
+class Thunder_Wave
+{
+    *applyOppEffects()
+}
+StatusMove <.. Thunder_Wave
+
+class Thunder_Shock
+{
+    *applyOppEffects()
+}
+SpecialMove <.. Thunder_Shock
+class SleepTalk
+{
+    *applyOppEffects()
+    *checkAccuracy()
+}
+StatusMove <.. SleepTalk
+
+class Mud_shot
+{
+    *applyOppEffects()
+}
+SpecialMove <.. Mud_shot
+
+class Leer
+{
+    *applyOppEffects()
+}
+StatusMove <.. Leer
+
+class Hydro_Pump
+SpecialMove <.. Hydro_Pump
+
+
+class Guillotine
+{
+    *checkAccuracy()
+    *applyOppEffects()
+}
+PhysicalMove <.. Guillotine
+
+class Focus_Energy
+{
+    *applySelfEffect()
+    *checkAccuracy()
+}
+StatusMove <.. Focus_Energy
+
+class Fussire
+{
+    *checkAccuracy()
+    *applyOppEffects()
+}
+PhysicalMove <.. Fussire
+class Flail
+{
+    *applySelfEffects()
+}
+PhysicalMove <.. Flail
+@enduml

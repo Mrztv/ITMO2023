@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Created-By: Timur Mirzaitov
+Main-Class: ru.Timur.Main
+Class-Path: Pokemon.jar

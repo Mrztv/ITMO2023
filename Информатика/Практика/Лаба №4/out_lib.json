@@ -1,0 +1,16 @@
+{
+  "schedule": {
+    "tuesday": {
+      "class": "computer science",
+      "teacher": "Rybakov Stepan Dmitrievich",
+      "start-time": "15:20",
+      "end-time": "16:50",
+      "address": "Kronverksky pr., d.49, lit.A",
+      "room": 2127,
+      "time": {
+        "teri": "sad",
+        "hasf": "asdhj"
+      }
+    }
+  }
+}
