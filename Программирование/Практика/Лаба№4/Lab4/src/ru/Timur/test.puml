@@ -1,0 +1,42 @@
+@startuml name Lab3
+enum Interior{
+    SOFA
+    SOME
+    FIREPLACE
+    BUFFET
+    SECRETAIR
+    name
+    contains[]
+    getContains()
+    setContains()
+    getName()
+}
+abstract Human{
+    name
+    getName()
+}
+class Child{
+    location
+    think()
+    getLocation()
+}
+class Robber{
+    whistle()
+    search()
+}
+interface Hideable{
+    hide()
+}
+interface Sneakable{
+    sneak()
+}
+
+Human <|-- Child
+Human <|-- Robber
+
+Child <|.. Hideable
+Child <|.. Sneakable
+
+Robber <|.. Sneakable
+
+@enduml
