@@ -31,7 +31,7 @@ interface Sneakable{
     sneak()
 }
 
-Human <|-- Child
+Human ^-- Child
 Human <|-- Robber
 
 Child <|.. Hideable

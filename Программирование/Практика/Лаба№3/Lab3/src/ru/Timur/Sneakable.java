@@ -2,5 +2,5 @@ package ru.Timur;
 
 //Позволяет объекту краться
 public interface Sneakable {
-    void sneak(String string);
+    void sneak(String location);
 }

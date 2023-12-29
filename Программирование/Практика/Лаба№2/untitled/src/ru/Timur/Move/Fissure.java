@@ -31,7 +31,7 @@ public class Fissure extends PhysicalMove {
                 System.out.println("I still can FIGHT");
             }
         }
-        def.toString()
+
     }
 
 }

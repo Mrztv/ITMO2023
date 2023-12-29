@@ -6,7 +6,11 @@ public enum Interior {
     SOFA("диван"),
     SOME("что-то"),
     FIREPLACE("камин"),
-    BUFFET("буфет"),
+    BUFFET("буфет"){
+        public void open(){
+            System.out.println("Буфет распахнулся");
+        }
+    },
     SECRETAIRE("секретар");
 
     private final String name;
@@ -35,4 +39,6 @@ public enum Interior {
                 ", contains=" + Arrays.toString(contains) +
                 '}';
     }
+
+    public void open() {}
 }
