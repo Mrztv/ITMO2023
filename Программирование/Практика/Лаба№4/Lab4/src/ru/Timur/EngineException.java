@@ -1,15 +1,7 @@
-//package ru.Timur;
-//
-//public class EngineException extends Exception{
-//    public EngineException(String message){
-//        super(message);
-//    }
-//}
-//
+package ru.Timur;
 
-
-ц
-
-
-
-
+public class EngineException extends Exception{
+    public EngineException(String message){
+        super(message);
+    }
+}
