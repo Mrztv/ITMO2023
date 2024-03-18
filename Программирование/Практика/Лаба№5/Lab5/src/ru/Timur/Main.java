@@ -3,16 +3,26 @@ package ru.Timur;
 
 import ru.Timur.Command.Invoker;
 import ru.Timur.Command.Storage;
+import ru.Timur.Exceptions.CantReadFileException;
 import ru.Timur.Exceptions.EndOfFileException;
 import ru.Timur.Exceptions.NonValidFileElementException;
-import ru.Timur.Scripts.StreamReader;
 import ru.Timur.XML.StaxXMLReader;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
+/**
+ * Класс Main
+ * @author timur
+ */
 public class Main {
+    /**
+     * main точка входа, загрузка файла xml
+     * @param args
+     */
     public static void main(String[] args) {
         Storage storage = new Storage(); //Создание хранилища для коллекции
 
@@ -23,9 +33,17 @@ public class Main {
         BufferedInputStream file = null;
         while (true){
             try{
-                file = new BufferedInputStream(new FileInputStream(pathFile));
-                break;
-            }catch (FileNotFoundException e){
+                if(Files.exists(Paths.get(pathFile))) {
+                    if(Files.isReadable(Paths.get(pathFile))){
+                        file = new BufferedInputStream(new FileInputStream(pathFile));
+                        break;
+                    }else{
+                        throw new CantReadFileException();
+                    }
+                }else {
+                    throw new FileNotFoundException();
+                }
+            }catch (FileNotFoundException | NullPointerException | CantReadFileException e){
                 System.out.println(e.toString());
                 Scanner scanner = new Scanner(System.in);
                 System.out.println("""

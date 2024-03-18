@@ -5,19 +5,32 @@ import ru.Timur.Exceptions.EndOfFileException;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
 
+/**
+ * Класс для чтения XML файла и парсинга в коллекцию
+ */
 public class StaxXMLReader implements AutoCloseable {
     private static final XMLInputFactory FACTORY = XMLInputFactory.newInstance();
 
     private final XMLEventReader reader;
 
+    /**
+     * Задание читателя потока
+     * @param inputStream
+     * @throws XMLStreamException
+     */
     public StaxXMLReader(InputStream inputStream) throws XMLStreamException {
         this.reader = FACTORY.createXMLEventReader(inputStream);
     }
 
+
+    /**
+     * Чтение элемента из файла и оформление его в виде {@link ru.Timur.SpaceMarine}
+     * @return элемент
+     * @throws XMLStreamException
+     */
     public String readElement() throws XMLStreamException {
         XMLEvent xmlEvent = null;
         boolean inSpaceMarine = false;
@@ -59,41 +72,13 @@ public class StaxXMLReader implements AutoCloseable {
         return string;
     }
 
-//    public boolean startElement(String element, String parent) throws XMLStreamException {
-//        while (reader.hasNext()) {
-//            int event = reader.next();
-//            if (parent != null && event == XMLEvent.END_ELEMENT &&
-//                    parent.equals(reader.getLocalName())) {
-//                return false;
-//            }
-//            if (event == XMLEvent.START_ELEMENT &&
-//                    element.equals(reader.getLocalName())) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
-//    public String getAttribute(String name) throws XMLStreamException {
-//        return reader.getAttributeValue(null, name);
-//    }
-    public String getText() throws XMLStreamException {
-        return reader.getElementText();
-    }
-
-//    public int getCount(){
-//        return reader.getAttributeCount();
-//    }
-
+    /**
+     * Есть ли еще элемент в файле
+     * @return true если есть
+     */
     public boolean hasNext(){
         return this.reader.hasNext();
     }
-
-
-    public XMLEventReader getReader(){
-        return reader;
-    }
-
 
     @Override
     public void close() {

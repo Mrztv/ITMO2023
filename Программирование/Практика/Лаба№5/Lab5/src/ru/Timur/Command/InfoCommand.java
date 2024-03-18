@@ -1,5 +1,8 @@
 package ru.Timur.Command;
-
+/**
+ * Класс для инкапсуляции команды Info
+ * @author timur
+ */
 public class InfoCommand implements Command {
     private final Storage storage;
 

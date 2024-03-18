@@ -1,5 +1,8 @@
 package ru.Timur.Command;
-
+/**
+ * Класс для инкапсуляции команды AverageOfHealth
+ * @author timur
+ */
 public class AverageOfHealthCommand implements Command{
     private final Storage storage;
 

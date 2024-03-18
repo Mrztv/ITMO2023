@@ -1,14 +1,12 @@
 package ru.Timur.Command;
 
-import com.sun.source.tree.Tree;
 import ru.Timur.*;
 import ru.Timur.Exceptions.ExitException;
 import ru.Timur.Exceptions.NonValidFileElementException;
-import ru.Timur.Scripts.StreamReader;
+import ru.Timur.StreamReader;
 import ru.Timur.XML.StaxXMLWriter;
 
 import javax.xml.stream.XMLStreamException;
-import java.awt.font.LineMetrics;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,20 +14,30 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Pattern;
 
+/**
+ * Класс хранилища коллекции и ресивер
+ * @author timur
+ */
 public class Storage{
-    private TreeSet<SpaceMarine> collection = new TreeSet<SpaceMarine>();
+    private TreeSet<SpaceMarine> collection = new TreeSet<>();
     private final Date initializationDate;
     private InputStream inputStream;
 
-
-
-    private PriorityQueue<String> executeScriptQueue = new PriorityQueue<String>();
-
+    /**
+     * Конструктор
+     */
     public Storage(){
         initializationDate = new Date();
         inputStream = System.in;
     }
 
+    /**
+     * Добавление элемента в коллекцию
+     * @param streamReader читатель потока
+     * @throws NonValidFileElementException
+     * @throws IOException
+     * @throws InputMismatchException
+     */
     public void add(StreamReader streamReader) throws NonValidFileElementException, IOException, InputMismatchException{
         if (collection.add(createElemFromInput(streamReader))) {
             if (inputStream == System.in) System.out.println("Элемент успешно добавлен");
@@ -38,12 +46,18 @@ public class Storage{
         }
     }
 
+    /**
+     * Вывод информации о коллекции в System.out
+     */
     public void info(){
         System.out.println(collection.getClass());
         System.out.println(collection.size());
         System.out.println(initializationDate);
     }
 
+    /**
+     * Вывод элементов коллекции в System.out
+     */
     public void show(){
         System.out.println("Collection:");
         if(collection.isEmpty()){
@@ -54,22 +68,25 @@ public class Storage{
         }
     }
 
-    public void delete(){
+    /**
+     * Удаление элемента из коллекции по ID
+     */
+    public void remove_by_id(){
         int id;
         if(Arguments.getSize() == 1) {
             id = Integer.parseInt(Arguments.getArg());
         }else{
             throw new NumberFormatException();
         }
-        Iterator<SpaceMarine> it = collection.iterator();
-        while(it.hasNext()){
-            if(it.next().getId() == id){
-                it.remove();
-            }
-        }
+        collection.removeIf(spaceMarine -> spaceMarine.getId() == Id.id);
     }
 
-
+    /**
+     * Обновление существующего элемента
+     * @param streamReader
+     * @throws IOException
+     * @throws NonValidFileElementException
+     */
     public void update(StreamReader streamReader) throws IOException, NonValidFileElementException{
         final int id;
         Id.decId();
@@ -105,6 +122,9 @@ public class Storage{
 
     }
 
+    /**
+     * Вывод описаний команд в System.out
+     */
     public void help(){
         for(Map.Entry<String, Command> elem : Invoker.commands.entrySet()){
             System.out.print(elem.getKey() + ": ");
@@ -112,52 +132,72 @@ public class Storage{
         }
     }
 
+    /**
+     * Выход из приложения без сохранения
+     */
     public void exit(){
         throw new ExitException();
     }
 
+    /**
+     * Удаление всех элементов коллекции
+     */
     public void clear(){
         collection.clear();
     }
 
+    /**
+     * Сохранение коллекции в файл
+     * @param file
+     * @throws FileNotFoundException
+     * @throws XMLStreamException
+     */
     public void save(File file) throws FileNotFoundException, XMLStreamException{
         StaxXMLWriter staxXMLWriter = new StaxXMLWriter(new PrintWriter(file));
         staxXMLWriter.writeElement(this);
     }
 
+    /**
+     * Выполнение файла-скрипта
+     */
     public void execute_script(){
         final TreeSet<SpaceMarine> backupCollection = (TreeSet<SpaceMarine>) collection.clone();
         try{
-            String filePath = Arguments.getArg();
-            if(Arguments.getSize() != 0){
+            String filePath;
+            if(Arguments.getSize() == 1){
+                filePath = Arguments.getArg();
+            }else{
                 System.out.println("Неправильный аргумент");
                 return;
             }
             Path path = Paths.get(filePath);
             if(Files.exists(path) && Files.isReadable(path)){
                 if(OpenedFileSet.inSet(path)){
+                    System.out.println("Файл \"" + path.toAbsolutePath().toString() + "\" не выполнен");
                     return;
                 }
                 //System.out.println(path.toAbsolutePath().toString());
                 OpenedFileSet.add(path);
-                inputStream = new FileInputStream(new File(filePath));
+                inputStream = new FileInputStream(filePath);
                 Invoker invoker = new Invoker(inputStream);
                 invoker.readStream(this);
                 OpenedFileSet.remove(path);
                 inputStream = System.in;
+                System.out.println("Скрипт выполнен");
             }else{
                 System.out.println("Файл не найден");
-                return;
             }
         }catch (FileNotFoundException e){
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }catch (RuntimeException e){
             collection = backupCollection;
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
     }
 
-    // Создание элемента типа SpaceMarine из потока ввода, для ручного ввода и, в идеале, для чтения из файла.
+    /**
+     * Создание элемента типа SpaceMarine из потока ввода
+     */
     public SpaceMarine createElemFromInput(StreamReader streamReader) throws NoSuchElementException, IOException{
         String name = null; //Поле не может быть null, Строка не может быть пустой
         Coordinates coordinates= null; //Поле не может быть null
@@ -377,7 +417,7 @@ public class Storage{
                     if(inputStream == System.in) System.out.println("Непрвильный ввод, попробуйте снова");
                 }
             } catch (InputMismatchException e) {
-                if(inputStream == System.in) System.out.println("Непрвильный ввод, попробуйте снова");
+                if(inputStream == System.in) System.out.println("Неправильный ввод, попробуйте снова");
                 else throw  new NonValidFileElementException("category value");
             }
         }while (!successName);
@@ -393,10 +433,10 @@ public class Storage{
                     chapterCount = inputCount;
                     successCount =  true;
                 } else {
-                    if(inputStream == System.in) System.out.println("Непрвильный ввод, попробуйте снова");
+                    if(inputStream == System.in) System.out.println("Неправильный ввод, попробуйте снова");
                 }
             }catch (InputMismatchException | NumberFormatException e){
-                if(inputStream == System.in) System.out.println("Непрвильный ввод, попробуйте снова");
+                if(inputStream == System.in) System.out.println("Неправильный ввод, попробуйте снова");
                 else throw  new NonValidFileElementException("category value");
             }
         }while (!successCount);
@@ -407,24 +447,25 @@ public class Storage{
 
     }
 
-
+    /**
+     * Возвращает коллекцию
+     * @return {@link Storage#collection}
+     */
     public Collection<SpaceMarine> getCollection(){
         return collection;
     }
 
-    public Date getInitializationDate(){
-        return initializationDate;
-    }
-
-
-    public InputStream getInputStream() {
-        return inputStream;
-    }
-
+    /**
+     * Устанавливает {@link Storage#inputStream}
+     * @param inputStream
+     */
     public void setInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
     }
 
+    /**
+     * Класс для сравнивания элементов коллекции по здоровью
+     */
     static class HealthC implements Comparator<SpaceMarine>{
         @Override
         public int compare(SpaceMarine o1, SpaceMarine o2) {
@@ -432,12 +473,11 @@ public class Storage{
         }
     }
 
-    public void healthSort(){
-        TreeSet<SpaceMarine> healthSet = new TreeSet<SpaceMarine>(new HealthC());
-        healthSet.addAll(collection);
-        System.out.println(healthSet);
-    }
-
+    /**
+     * Добавляет элемент в коллекцию если значение его здоровья минимально
+     * @param streamReader откуда элемент читается
+     * @throws IOException
+     */
     public void addIfMin(StreamReader streamReader) throws IOException{
         SpaceMarine sm = createElemFromInput(streamReader);
         TreeSet<SpaceMarine> spaceMarines = new TreeSet<>(new HealthC());
@@ -449,6 +489,11 @@ public class Storage{
         }else collection.add(sm);
     }
 
+    /**
+     * Удаляет из коллекции все элементы, превышающие заданный
+     * @param streamReader
+     * @throws IOException
+     */
     public void removeGreater(StreamReader streamReader) throws IOException{
         SpaceMarine spaceMarine = createElemFromInput(streamReader);
         Id.decId();
@@ -458,14 +503,21 @@ public class Storage{
 
     }
 
+    /**
+     * Удаляет из коллекции все элементы, меньшие, чем заданный
+     * @param streamReader
+     * @throws IOException
+     */
     public void removeLower(StreamReader streamReader) throws IOException{
         SpaceMarine spaceMarine = createElemFromInput(streamReader);
         Id.decId();
         TreeSet<SpaceMarine> healthSet = new TreeSet<>(new HealthC());
-        boolean found = false;
         healthSet.removeIf(spaceMarine1 -> spaceMarine1.getHealth() < spaceMarine.getHealth());
     }
 
+    /**
+     * Выводит среднее значение поля health для всех элементов коллекции
+     */
     public void averageOfHealth(){
         Double sum = 0.d;
         for(SpaceMarine spaceMarine : collection){
@@ -473,6 +525,11 @@ public class Storage{
         }
         System.out.println(sum/collection.size());
     }
+
+    /**
+     * Выводит количество элементов, значение поля health которых больше заданного
+     * @throws NumberFormatException
+     */
     public void countGreaterThanHealth() throws NumberFormatException   {
         Double health;
         if(Arguments.getSize() == 1){
@@ -487,14 +544,17 @@ public class Storage{
         }
     }
 
+    /**
+     * Выводит элементы, значение поля name которых начинается с заданной подстроки
+     */
     public void filterStartsWithName(){
         String name = "";
         if(Arguments.getSize() == 1){
             name = Arguments.getArg();
         }
         for(SpaceMarine spaceMarine : collection){
-            String regex = "^" + name;
-            if(Pattern.matches(name, (CharSequence) spaceMarine.getName())){
+            String regex = "^" + name + ".+";
+            if(Pattern.matches(regex, spaceMarine.getName().trim())){
                 System.out.println(spaceMarine.toString());
             }
         }

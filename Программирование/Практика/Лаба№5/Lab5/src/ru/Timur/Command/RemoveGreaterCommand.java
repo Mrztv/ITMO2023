@@ -1,9 +1,12 @@
 package ru.Timur.Command;
 
-import ru.Timur.Scripts.StreamReader;
+import ru.Timur.StreamReader;
 
 import java.io.IOException;
-
+/**
+ * Класс для инкапсуляции команды RemoveGreater
+ * @author timur
+ */
 public class RemoveGreaterCommand implements Command{
     Storage storage;
     StreamReader streamReader;

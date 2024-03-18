@@ -1,12 +1,15 @@
 package ru.Timur.Command;
 
 import ru.Timur.Exceptions.NonValidFileElementException;
-import ru.Timur.Scripts.StreamReader;
+import ru.Timur.StreamReader;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.InputMismatchException;
 
+/**
+ * Класс для инкапсуляции команды Update
+ * @author timur
+ */
 public class UpdateCommand implements Command {
     private final Storage storage;
     private final StreamReader streamReader;

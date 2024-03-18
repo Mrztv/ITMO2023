@@ -3,7 +3,10 @@ package ru.Timur.Command;
 import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.FileNotFoundException;
-
+/**
+ * Класс для инкапсуляции команды Save
+ * @author timur
+ */
 public class SaveCommand implements Command{
     private final Storage storage;
     private final File file;

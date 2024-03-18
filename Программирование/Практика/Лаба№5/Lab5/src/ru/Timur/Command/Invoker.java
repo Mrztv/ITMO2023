@@ -1,30 +1,44 @@
 package ru.Timur.Command;
 
-import ru.Timur.Arguments;
 import ru.Timur.Exceptions.ExitException;
-import ru.Timur.Scripts.StreamReader;
+import ru.Timur.StreamReader;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+/**
+ * Класс вызывающий команды у ресивера
+ * @author timur
+ * @see Storage
+ */
 public class Invoker{
+    /**
+     *Поле для хранения читателя потока команд
+     */
     private StreamReader streamReader;
+    /**
+     * {@link Map} Для хранения и вызова команд
+     */
     static Map<String, Command> commands;
 
-    private InputStream inputStream = System.in;
+    private InputStream inputStream;
 
+    /**
+     * Конструктор
+     * @param inputStream откуда вводится информация
+     */
     public Invoker(InputStream inputStream){
         this.inputStream = inputStream;
         streamReader = new StreamReader(inputStream);
     }
 
-    public void setInputStream(InputStream inputStream) {
-        this.inputStream = inputStream;
-        streamReader = new StreamReader(inputStream);
-    }
-
+    /**
+     * Чтение потока и вызов команд
+     * @param storage хранилище коллекции
+     * @throws RuntimeException
+     */
     public void readStream(Storage storage) throws RuntimeException{
         commands = new HashMap<String, Command>();
         commands.put("add", new AddCommand(storage, streamReader));
@@ -83,7 +97,7 @@ public class Invoker{
             if (inputStream == System.in) System.out.println("Выход из приложения");
             System.exit(1);
         }catch (NullPointerException e){
-            streamReader.setInputStream(System.in);
+            streamReader.setBufferedReader(System.in);
             return;
         }catch (Exception e){
             throw new RuntimeException();

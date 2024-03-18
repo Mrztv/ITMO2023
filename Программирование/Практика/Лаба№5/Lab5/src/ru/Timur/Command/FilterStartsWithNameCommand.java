@@ -1,5 +1,8 @@
 package ru.Timur.Command;
-
+/**
+ * Класс для инкапсуляции команды FilterStartsWithName
+ * @author timur
+ */
 public class FilterStartsWithNameCommand implements Command{
     private final Storage storage;
 

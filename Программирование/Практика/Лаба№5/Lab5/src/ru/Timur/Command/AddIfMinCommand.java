@@ -1,9 +1,12 @@
 package ru.Timur.Command;
 
-import ru.Timur.Scripts.StreamReader;
+import ru.Timur.StreamReader;
 
 import java.io.IOException;
-
+/**
+ * Класс для инкапсуляции команды AddIfMin
+ * @author timur
+ */
 public class AddIfMinCommand implements Command{
     private final Storage storage;
     private final StreamReader streamReader;

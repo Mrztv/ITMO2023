@@ -1,16 +1,14 @@
 package ru.Timur.Command;
 
-import ru.Timur.Exceptions.ExitException;
 import ru.Timur.Exceptions.NonValidFileElementException;
-import ru.Timur.Scripts.StreamReader;
+import ru.Timur.StreamReader;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.InputMismatchException;
-import java.util.Objects;
-
+/**
+ * Класс для инкапсуляции команды Add
+ * @author timur
+ */
 public class AddCommand implements Command {
     private Storage storage;
     private StreamReader streamReader;

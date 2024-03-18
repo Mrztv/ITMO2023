@@ -1,7 +1,9 @@
 package ru.Timur.Command;
 
-import java.io.FileNotFoundException;
-
+/**
+ * Класс для инкапсуляции команды ExecuteScript
+ * @author timur
+ */
 public class ExecuteScriptCommand implements Command{
     private Storage storage;
 

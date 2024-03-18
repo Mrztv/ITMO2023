@@ -1,5 +1,8 @@
 package ru.Timur.Command;
-
+/**
+ * Класс для инкапсуляции команды RemoveById
+ * @author timur
+ */
 public class RemoveByIdCommand implements Command {
     private final Storage storage;
     private int id;
@@ -14,7 +17,7 @@ public class RemoveByIdCommand implements Command {
     @Override
     public void execute(){
         try{
-            storage.delete();
+            storage.remove_by_id();
         } catch (NumberFormatException e){
             throw e;
         }

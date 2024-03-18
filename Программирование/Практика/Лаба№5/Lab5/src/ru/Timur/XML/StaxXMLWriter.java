@@ -8,14 +8,29 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
 
+/**
+ * Класс для записи элементов коллекции в формате XML
+ * @author timur
+ * @see Storage
+ */
 public class StaxXMLWriter{
     private static final XMLOutputFactory FACTORY = XMLOutputFactory.newInstance();
     private final XMLStreamWriter writer;
 
+    /**
+     * Создание врайтера
+     * @param printWriter
+     * @throws XMLStreamException
+     */
     public StaxXMLWriter(PrintWriter printWriter) throws XMLStreamException{
         this.writer = FACTORY.createXMLStreamWriter(printWriter);
     }
 
+    /**
+     * Добавление элемента в поток вывода
+     * @param storage
+     * @throws XMLStreamException
+     */
     public void writeElement(Storage storage) throws XMLStreamException{
         writer.writeStartDocument();
         writer.writeCharacters("\n");
@@ -40,7 +55,7 @@ public class StaxXMLWriter{
             //Y
             writer.writeCharacters("\n\t\t\t");
             writer.writeStartElement("Y");
-            writer.writeCharacters(spaceMarine.getCoordinates().getX().toString());
+            writer.writeCharacters(spaceMarine.getCoordinates().getY().toString());
             writer.writeEndElement();
 
             writer.writeCharacters("\n\t\t");

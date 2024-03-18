@@ -1,5 +1,8 @@
 package ru.Timur.Command;
-
+/**
+ * Класс для инкапсуляции команды Show
+ * @author timur
+ */
 public class ShowCommand implements Command {
     private final Storage storage;
 

@@ -1,8 +1,9 @@
 package ru.Timur.Command;
 
-import ru.Timur.Command.Command;
-import ru.Timur.Command.Storage;
-
+/**
+ * Класс для инкапсуляции команды Help
+ * @author timur
+ */
 public class HelpCommand implements Command {
     private final Storage storage;
 

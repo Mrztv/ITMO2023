@@ -1,5 +1,8 @@
 package ru.Timur.Command;
-
+/**
+ * Класс для инкапсуляции команды CountGreaterThanHealth
+ * @author timur
+ */
 public class CountGreaterThanHealthCommand implements Command{
     private final Storage storage;
 
