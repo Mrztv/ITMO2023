@@ -183,7 +183,7 @@ public class Storage{
                 invoker.readStream(this);
                 OpenedFileSet.remove(path);
                 inputStream = System.in;
-                System.out.println("Скрипт выполнен");
+                System.out.println("Скрипт \"" + path.toAbsolutePath() + "\" выполнен");
             }else{
                 System.out.println("Файл не найден");
             }
@@ -519,6 +519,10 @@ public class Storage{
      * Выводит среднее значение поля health для всех элементов коллекции
      */
     public void averageOfHealth(){
+        if(collection.isEmpty()){
+            System.out.println("Коллекция пуста");
+            return;
+        }
         Double sum = 0.d;
         for(SpaceMarine spaceMarine : collection){
             sum += spaceMarine.getHealth();
@@ -560,5 +564,15 @@ public class Storage{
         }
     }
 
+
+}
+
+
+
+class Pair<T, V> {
+
+}
+
+class PairOfString extends Pair<String, String>{
 
 }
