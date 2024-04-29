@@ -1,205 +1,98 @@
-package ru.Timur.Command;
+package ru.Timur.XML;
 
 import ru.Timur.*;
-import ru.Timur.Exceptions.ExitException;
+import ru.Timur.Exceptions.EndOfFileException;
 import ru.Timur.Exceptions.NonValidFileElementException;
-import ru.Timur.StreamReader;
-import ru.Timur.XML.StaxXMLWriter;
 
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.regex.Pattern;
+import javax.xml.stream.events.XMLEvent;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.InputMismatchException;
 
 /**
- * Класс хранилища коллекции и ресивер
- * @author timur
+ * Класс для чтения XML файла и парсинга в коллекцию
  */
-public class Storage{
-    private TreeSet<SpaceMarine> collection = new TreeSet<>();
+public class StaxXMLReader implements AutoCloseable {
+    private static final XMLInputFactory FACTORY = XMLInputFactory.newInstance();
 
-    private final Date initializationDate;
-    private InputStream inputStream;
-
-    /**
-     * Конструктор
-     */
-    public Storage(){
-        initializationDate = new Date();
-        inputStream = System.in;
-    }
+    private final XMLEventReader reader;
 
     /**
-     * Добавление элемента в коллекцию
-     * @param streamReader читатель потока
-     * @throws NonValidFileElementException
-     * @throws IOException
-     * @throws InputMismatchException
-     */
-    public void add(StreamReader streamReader) throws NonValidFileElementException, IOException, InputMismatchException{
-        if (collection.add(createElemFromInput(streamReader))) {
-            if (inputStream == System.in) System.out.println("Элемент успешно добавлен");
-        } else {
-            if (inputStream == System.in) System.out.println("Элемент не был добавлен");
-        }
-    }
-
-    /**
-     * Вывод информации о коллекции в System.out
-     */
-    public void info(){
-        System.out.println(collection.getClass());
-        System.out.println(collection.size());
-        System.out.println(initializationDate);
-    }
-
-    /**
-     * Вывод элементов коллекции в System.out
-     */
-    public void show(){
-        System.out.println("Collection:");
-        if(collection.isEmpty()){
-            System.out.println("Перекати поле...");
-        }
-        for(SpaceMarine sm : collection){
-            System.out.println(sm.toString());
-        }
-    }
-
-    /**
-     * Удаление элемента из коллекции по ID
-     */
-    public void remove_by_id(){
-        int id;
-        if(Arguments.getSize() == 1) {
-            id = Integer.parseInt(Arguments.getArg());
-        }else{
-            throw new NumberFormatException();
-        }
-        collection.removeIf(spaceMarine -> spaceMarine.getId() == Id.id);
-    }
-
-    /**
-     * Обновление существующего элемента
-     * @param streamReader
-     * @throws IOException
-     * @throws NonValidFileElementException
-     */
-    public void update(StreamReader streamReader) throws IOException, NonValidFileElementException{
-        final int id;
-        Id.decId();
-        if(Arguments.getSize() != 0) {
-            id = Integer.parseInt(Arguments.getArg());
-        } else{
-            throw new NumberFormatException();
-        }
-        for(SpaceMarine sm : collection) {
-            if (sm.getId() == id) {
-                SpaceMarine buffersm;
-
-                buffersm = createElemFromInput(streamReader);
-
-                sm.setName(buffersm.getName());
-
-                sm.setCoordinates(buffersm.getCoordinates());
-
-                sm.setHealth(buffersm.getHealth());
-
-                sm.setLoyal(buffersm.isLoyal());
-
-                sm.setAchievements(buffersm.getAchievements());
-
-                sm.setCategory(buffersm.getCategory());
-
-                sm.setChapter(buffersm.getChapter());
-                return;
-            }
-        }
-        System.out.println("Id не найден");
-        throw new RuntimeException();
-
-    }
-
-    /**
-     * Вывод описаний команд в System.out
-     */
-    public void help(){
-        for(Map.Entry<String, Command> elem : Invoker.commands.entrySet()){
-            System.out.print(elem.getKey() + ": ");
-            elem.getValue().getDiscription();
-        }
-    }
-
-    /**
-     * Выход из приложения без сохранения
-     */
-    public void exit(){
-        throw new ExitException();
-    }
-
-    /**
-     * Удаление всех элементов коллекции
-     */
-    public void clear(){
-        collection.clear();
-    }
-
-    /**
-     * Сохранение коллекции в файл
-     * @param file
-     * @throws FileNotFoundException
+     * Задание читателя потока
+     * @param inputStream
      * @throws XMLStreamException
      */
-    public void save(File file) throws FileNotFoundException, XMLStreamException{
-        StaxXMLWriter staxXMLWriter = new StaxXMLWriter(new PrintWriter(file));
-        staxXMLWriter.writeElement(this);
+    public StaxXMLReader(InputStream inputStream) throws XMLStreamException {
+        this.reader = FACTORY.createXMLEventReader(inputStream);
     }
 
+
     /**
-     * Выполнение файла-скрипта
+     * Чтение элемента из файла и оформление его в виде {@link ru.Timur.SpaceMarine}
+     * @return элемент
+     * @throws XMLStreamException
      */
-    public void execute_script(){
-        final TreeSet<SpaceMarine> backupCollection = (TreeSet<SpaceMarine>) collection.clone();
-        try{
-            String filePath;
-            if(Arguments.getSize() == 1){
-                filePath = Arguments.getArg();
-            }else{
-                System.out.println("Неправильный аргумент");
-                return;
-            }
-            Path path = Paths.get(filePath);
-            if(Files.exists(path) && Files.isReadable(path)){
-                if(OpenedFileSet.inSet(path)){
-                    System.out.println("Файл \"" + path.toAbsolutePath().toString() + "\" не выполнен");
-                    return;
+    public SpaceMarine readElement() throws XMLStreamException {
+        XMLEvent xmlEvent = null;
+        boolean inSpaceMarine = false;
+        while (reader.hasNext()) {
+            xmlEvent = reader.nextEvent();
+            if(xmlEvent.isStartElement()){
+                if(xmlEvent.asStartElement().getName().toString().equals("SpaceMarine")) {
+                    inSpaceMarine = true;
+                    break;
                 }
-                //System.out.println(path.toAbsolutePath().toString());
-                OpenedFileSet.add(path);
-                inputStream = new FileInputStream(filePath);
-                Invoker invoker = new Invoker(inputStream);
-                invoker.readStream(this);
-                OpenedFileSet.remove(path);
-                inputStream = System.in;
-                System.out.println("Скрипт \"" + path.toAbsolutePath() + "\" выполнен");
-            }else{
-                System.out.println("Файл не найден");
+            } else if (xmlEvent.isEndDocument()) {
+                throw new EndOfFileException();
             }
-        }catch (FileNotFoundException e){
-            System.out.println(e.getMessage());
-        }catch (RuntimeException e){
-            collection = backupCollection;
-            System.out.println(e.getMessage());
+
         }
+        boolean written = false;
+        String string = "";
+        while(inSpaceMarine && reader.hasNext()){
+            xmlEvent = reader.nextEvent();
+            if(xmlEvent.isCharacters()){
+                if(!xmlEvent.asCharacters().isWhiteSpace()){
+                    written = true;
+                    string += xmlEvent.asCharacters().getData() + "\n";
+                }
+            }else if(xmlEvent.isEndElement()) {
+                if(!written){
+                    written = false;
+                    string += null + "\n";
+                }
+                if (xmlEvent.asEndElement().getName().toString().equals("SpaceMarine")) {
+                    break;
+                }
+            }else if (xmlEvent.isEndDocument()) {
+                throw new EndOfFileException();
+            }else{
+                written = false;
+            }
+        }
+
+        SpaceMarine element = validation(string);
+
+        return element;
     }
 
     /**
-     * Создание элемента типа SpaceMarine из потока ввода
+     * Есть ли еще элемент в файле
+     * @return true если есть
      */
-    public SpaceMarine createElemFromInput(StreamReader streamReader) throws NoSuchElementException, IOException{
+    public boolean hasNext(){
+        return this.reader.hasNext();
+    }
+
+    public SpaceMarine validation(String element){
+        ByteArrayInputStream bais = new ByteArrayInputStream(element.getBytes());
+        InputStream inputStream = bais;
+        StreamReader streamReader = new StreamReader(bais);
+
+
         String name = null; //Поле не может быть null, Строка не может быть пустой
         Coordinates coordinates= null; //Поле не может быть null
         Float health= null; //Поле не может быть null, Значение поля должно быть больше 0
@@ -207,7 +100,7 @@ public class Storage{
         String achievements = null; //Поле может быть null
         AstartesCategory category = null; //Поле может быть null
         Chapter chapter = null; //Поле не может быть null
-        
+
 //      name
         while(true){
             try {
@@ -443,129 +336,19 @@ public class Storage{
         }while (!successCount);
 
         chapter = new Chapter(chapterName, chapterCount);
-
+        Id.decId();
         return new SpaceMarine(name, coordinates, health, loyal, achievements, category, chapter);
-
     }
 
-    /**
-     * Возвращает коллекцию
-     * @return {@link Storage#collection}
-     */
-    public Collection<SpaceMarine> getCollection(){
-        return collection;
-    }
 
-    /**
-     * Устанавливает {@link Storage#inputStream}
-     * @param inputStream
-     */
-    public void setInputStream(InputStream inputStream) {
-        this.inputStream = inputStream;
-    }
 
-    /**
-     * Класс для сравнивания элементов коллекции по здоровью
-     */
-    static class HealthC implements Comparator<SpaceMarine>{
-        @Override
-        public int compare(SpaceMarine o1, SpaceMarine o2) {
-            return o1.getHealth().compareTo(o2.getHealth());
-        }
-    }
-
-    /**
-     * Добавляет элемент в коллекцию если значение его здоровья минимально
-     * @param streamReader откуда элемент читается
-     * @throws IOException
-     */
-    public void addIfMin(StreamReader streamReader) throws IOException{
-        SpaceMarine sm = createElemFromInput(streamReader);
-        TreeSet<SpaceMarine> spaceMarines = new TreeSet<>(new HealthC());
-        spaceMarines.addAll(collection);
-        if(!spaceMarines.isEmpty()){
-            if(sm.getHealth() < spaceMarines.first().getHealth()){
-                collection.add(sm);
-            }else if(Id.id > 1) Id.decId();
-        }else collection.add(sm);
-    }
-
-    /**
-     * Удаляет из коллекции все элементы, превышающие заданный
-     * @param streamReader
-     * @throws IOException
-     */
-    public void removeGreater(StreamReader streamReader) throws IOException{
-        SpaceMarine spaceMarine = createElemFromInput(streamReader);
-        Id.decId();
-        TreeSet<SpaceMarine> healthSet = new TreeSet<>(new HealthC());
-        boolean found = false;
-        healthSet.removeIf(spaceMarine1 -> spaceMarine1.getHealth() > spaceMarine.getHealth());
-
-    }
-
-    /**
-     * Удаляет из коллекции все элементы, меньшие, чем заданный
-     * @param streamReader
-     * @throws IOException
-     */
-    public void removeLower(StreamReader streamReader) throws IOException{
-        SpaceMarine spaceMarine = createElemFromInput(streamReader);
-        Id.decId();
-        TreeSet<SpaceMarine> healthSet = new TreeSet<>(new HealthC());
-        healthSet.addAll(collection);
-        healthSet.removeIf(spaceMarine1 -> spaceMarine1.getHealth() < spaceMarine.getHealth());
-    }
-
-    /**
-     * Выводит среднее значение поля health для всех элементов коллекции
-     */
-    public void averageOfHealth(){
-        if(collection.isEmpty()){
-            System.out.println("Коллекция пуста");
-            return;
-        }
-        Double sum = 0.d;
-        for(SpaceMarine spaceMarine : collection){
-            sum += spaceMarine.getHealth();
-        }
-        System.out.println(sum/collection.size());
-    }
-
-    /**
-     * Выводит количество элементов, значение поля health которых больше заданного
-     * @throws NumberFormatException
-     */
-    public void countGreaterThanHealth() throws NumberFormatException   {
-        Double health;
-        if(Arguments.getSize() == 1){
-            health = Double.parseDouble(Arguments.getArg());
-            int count = 0;
-            for (SpaceMarine spaceMarine : collection){
-                if(spaceMarine.getHealth() > health) count++;
-            }
-            System.out.println(count);
-        }else{
-            throw new NumberFormatException();
-        }
-    }
-
-    /**
-     * Выводит элементы, значение поля name которых начинается с заданной подстроки
-     */
-    public void filterStartsWithName(){
-        String name = "";
-        if(Arguments.getSize() == 1){
-            name = Arguments.getArg();
-        }
-        for(SpaceMarine spaceMarine : collection){
-            String regex = "^" + name + ".+";
-            if(Pattern.matches(regex, spaceMarine.getName().trim())){
-                System.out.println(spaceMarine.toString());
+    @Override
+    public void close() {
+        if (reader != null) {
+            try {
+                reader.close();
+            } catch (XMLStreamException e) { // empty
             }
         }
     }
-
-
 }
-

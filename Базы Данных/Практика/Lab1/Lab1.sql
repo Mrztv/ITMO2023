@@ -37,7 +37,7 @@ CREATE TABLE star_system(
     system_id serial PRIMARY KEY,
     coordinate_id integer REFERENCES coordinates(coordinates_id),
     name text NOT NULL, 
-    planet_count integer NOT NULL
+    planet_count  integer DEFAULT 0 NOT NULL
 );
 
 CREATE TABLE planet(
@@ -100,7 +100,7 @@ INSERT INTO coordinates(x, y, z) VALUES (
 INSERT INTO star_system(coordinate_id, name, planet_count) VALUES (
     1,
     'Sun',
-    8
+    1
 );
 
 INSERT INTO coordinates(x, y, z) VALUES (

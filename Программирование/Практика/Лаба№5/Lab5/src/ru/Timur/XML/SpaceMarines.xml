@@ -4,7 +4,7 @@
 		<name>Timur</name>
 		<coordinates>
 			<X>14</X>
-			<Y>14</Y>
+			<Y>14.0</Y>
 		</coordinates>
 		<health>50.0</health>
 		<loyal>true</loyal>
@@ -19,7 +19,7 @@
 		<name>Name</name>
 		<coordinates>
 			<X>232</X>
-			<Y>232</Y>
+			<Y>232.0</Y>
 		</coordinates>
 		<health>412.0</health>
 		<loyal>true</loyal>
@@ -34,7 +34,7 @@
 		<name>Leonard</name>
 		<coordinates>
 			<X>23</X>
-			<Y>23</Y>
+			<Y>23.0</Y>
 		</coordinates>
 		<health>10000.0</health>
 		<loyal>true</loyal>
@@ -43,6 +43,66 @@
 		<chapter>
 			<name>1</name>
 			<marinesCount>999</marinesCount>
+		</chapter>
+	</SpaceMarine>
+	<SpaceMarine>
+		<name>Timur</name>
+		<coordinates>
+			<X>123</X>
+			<Y>312.0</Y>
+		</coordinates>
+		<health>123.0</health>
+		<loyal>true</loyal>
+		<achievements>achievement</achievements>
+		<category>ASSAULT</category>
+		<chapter>
+			<name>first</name>
+			<marinesCount>400</marinesCount>
+		</chapter>
+	</SpaceMarine>
+	<SpaceMarine>
+		<name>Timur</name>
+		<coordinates>
+			<X>123</X>
+			<Y>312.0</Y>
+		</coordinates>
+		<health>123.0</health>
+		<loyal>true</loyal>
+		<achievements>achievement</achievements>
+		<category>ASSAULT</category>
+		<chapter>
+			<name>first</name>
+			<marinesCount>400</marinesCount>
+		</chapter>
+	</SpaceMarine>
+	<SpaceMarine>
+		<name>Timur</name>
+		<coordinates>
+			<X>123</X>
+			<Y>312.0</Y>
+		</coordinates>
+		<health>123.0</health>
+		<loyal>true</loyal>
+		<achievements>achievement</achievements>
+		<category>ASSAULT</category>
+		<chapter>
+			<name>first</name>
+			<marinesCount>400</marinesCount>
+		</chapter>
+	</SpaceMarine>
+	<SpaceMarine>
+		<name>Timur</name>
+		<coordinates>
+			<X>123</X>
+			<Y>312.0</Y>
+		</coordinates>
+		<health>123.0</health>
+		<loyal>true</loyal>
+		<achievements>achievement</achievements>
+		<category>ASSAULT</category>
+		<chapter>
+			<name>first</name>
+			<marinesCount>400</marinesCount>
 		</chapter>
 	</SpaceMarine>
 </storage>
