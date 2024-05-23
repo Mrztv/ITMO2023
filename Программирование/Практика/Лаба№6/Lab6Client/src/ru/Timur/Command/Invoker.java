@@ -8,6 +8,7 @@ import ru.Timur.StreamReader;
 
 import java.io.*;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -169,8 +170,10 @@ public class Invoker{
         }catch (NullPointerException e){
             StreamReader.changeStreamReader(System.in);
             return;
-        }catch (Exception e){
-            throw new RuntimeException();
+        } catch (UnknownHostException e) {
+            System.out.println(e.toString());
+        } catch (IOException e) {
+            System.out.println(e.toString());
         }
     }
 

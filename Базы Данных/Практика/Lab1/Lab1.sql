@@ -22,7 +22,8 @@ CREATE TABLE crew_member(
     surname text NOT NULL,
     gender gender_enum NOT NULL,
     job text NOT NULL,
-    age integer NOT NULL
+    age integer NOT NULL,
+    visited_planet integer[]
 );
 
 
@@ -35,60 +36,55 @@ CREATE TABLE coordinates(
 
 CREATE TABLE star_system(
     system_id serial PRIMARY KEY,
-    coordinate_id integer REFERENCES coordinates(coordinates_id),
+    coordinate_id integer REFERENCES coordinates(coordinates_id) ON DELETE CASCADE,
     name text NOT NULL, 
     planet_count  integer DEFAULT 0 NOT NULL
 );
 
 CREATE TABLE planet(
     planet_id serial PRIMARY KEY,
-    system_id integer REFERENCES star_system(system_id),
+    system_id integer REFERENCES star_system(system_id) ON DELETE CASCADE,
     name text NOT NULL,
     isPopulated boolean NOT NULL,
-    coordinates_id integer REFERENCES coordinates(coordinates_id)
+    coordinates_id integer REFERENCES coordinates(coordinates_id) ON DELETE CASCADE
 );
 
 CREATE TABLE location(
     location_id serial PRIMARY KEY,
-    planet_id integer REFERENCES planet(planet_id),
+    planet_id integer REFERENCES planet(planet_id) ON DELETE CASCADE,
     name text NOT NULL,
-    coordinates_id integer REFERENCES coordinates(coordinates_id)
+    coordinates_id integer REFERENCES coordinates(coordinates_id) ON DELETE CASCADE
 );
 
 CREATE TABLE holes(
     holes_id serial PRIMARY KEY,
-    location_id integer REFERENCES location(location_id),
+    location_id integer REFERENCES location(location_id) ON DELETE CASCADE,
     count integer NOT NULL
 );
 
 CREATE TABLE columns(
     columns_id serial PRIMARY KEY,
-    location_id integer REFERENCES location(location_id),
+    location_id integer REFERENCES location(location_id) ON DELETE CASCADE,
     count integer NOT NULL,
     age integer NOT NULL
 );
 
-CREATE TABLE planetVisit(
-    passenger_id integer  REFERENCES crew_member(passenger_id),
-    planet_id integer REFERENCES planet(planet_id),
-    visit_date date NOT NULL,
-    PRIMARY KEY (passenger_id, planet_id)
-);
 
 CREATE TABLE ship(
     ship_id serial PRIMARY KEY,
     model text NOT NULL,
     name text NOT NULL,
     creation_year integer NOT NULL,
-    location_id integer REFERENCES location(location_id)
+    location_id integer REFERENCES location(location_id) ON DELETE CASCADE
 );
 
-INSERT INTO crew_member(name, surname, gender, job, age) VALUES (
+INSERT INTO crew_member(name, surname, gender, job, age, visited_planet_id) VALUES (
     'marik',
     'ivanov',
     'male',
     'engineer',
-    23
+    23,
+    '{1, 2, 3}'
 );
 
 INSERT INTO coordinates(x, y, z) VALUES (
@@ -137,12 +133,6 @@ INSERT INTO columns(location_id, count, age) VALUES(
     1,
     322,
     98
-);
-
-INSERT INTO planetVisit(passenger_id, planet_id, visit_date) VALUES(
-    1,
-    1,
-    '2112-05-24'
 );
 
 INSERT INTO ship(model, name, creation_year, location_id) VALUES(

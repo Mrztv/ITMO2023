@@ -146,11 +146,10 @@ public class Storage implements Serializable {
     }
 
     public String show(){
-        String out  = "";
-        for (SpaceMarine spaceMarine : this.collection){
-            out += spaceMarine.toString() + "\n";
-        }
-        return out;
+        return this.collection
+                .stream()
+                .map(SpaceMarine::toString)
+                .collect(Collectors.joining("\n"));
     }
 
     public boolean update(SpaceMarine spaceMarine){

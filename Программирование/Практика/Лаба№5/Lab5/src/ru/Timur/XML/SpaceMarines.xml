@@ -105,4 +105,19 @@
 			<marinesCount>400</marinesCount>
 		</chapter>
 	</SpaceMarine>
+	<SpaceMarine>
+		<name>Timur</name>
+		<coordinates>
+			<X>123</X>
+			<Y>312.0</Y>
+		</coordinates>
+		<health>123.0</health>
+		<loyal>true</loyal>
+		<achievements>achievement</achievements>
+		<category>ASSAULT</category>
+		<chapter>
+			<name>first</name>
+			<marinesCount>400</marinesCount>
+		</chapter>
+	</SpaceMarine>
 </storage>

@@ -5,11 +5,14 @@ import ru.Timur.Command.Validation;
 
 public class Main{
     public static void main(String[] args) {
-        try{
-            Invoker invoker = new Invoker(System.in);
-            invoker.readStream(new Validation());
-        }catch (RuntimeException e){
-            System.out.println(e);
+        while (true){
+
+            try{
+                Invoker invoker = new Invoker(System.in);
+                invoker.readStream(new Validation());
+            }catch (RuntimeException e){
+                System.out.println(e.toString());
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import ru.Timur.SpaceMarine;
 import ru.Timur.StreamReader;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * @author timur
  */
 public class AddIfMinCommand implements Command, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     private final Validation validation;
     private SpaceMarine spaceMarine;
