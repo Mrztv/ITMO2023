@@ -1,0 +1,125 @@
+@startuml
+newpage
+package Timur.Command{
+interface Command
+class AddCommand
+class AddIfMinCommand
+class AverageCommand
+class ClearCommand
+class CountGreaterThanHealthCommand
+class ExecuteScriptCommand
+class ExitCommand
+class FilterStartsWithNameCommand
+class HelpCommand
+class InfoCommand
+class RemoveByIdCommand
+class RemoveGreaterCommand
+class RemoveLowerCommand
+class SaveCommand
+class ShowCommand
+class UpdateCommand
+
+class Storage
+class Arguments
+class Invoker
+
+Command <-- AddCommand
+Command <-- AddIfMinCommand
+Command <-- AverageCommand
+Command <-- ClearCommand
+Command <-- CountGreaterThanHealthCommand
+Command <-- ExecuteScriptCommand
+Command <-- ExitCommand
+Command <-- FilterStartsWithNameCommand
+Command <-- HelpCommand
+Command <-- InfoCommand
+Command <-- RemoveByIdCommand
+Command <-- RemoveGreaterCommand
+Command <-- RemoveLowerCommand
+Command <-- SaveCommand
+Command <-- ShowCommand
+Command <-- UpdateCommand
+}
+
+package Timur{
+enum AstartesCategory
+class Chapter
+class ClientData
+class Coordinates
+class Id
+class OpenedFileSet
+class SpaceMarine
+class StreamReader
+}
+
+package Timur.XML{
+class StaxXMLReader
+class StaxXMLWriter
+}
+
+package Timur.Exceptions{
+class CantReadFileException
+class EndOfFileException
+class NonValidFileElementException
+}
+
+newpage
+package Timur.Command{
+interface Command
+class AddCommand
+class AddIfMinCommand
+class AverageCommand
+class ClearCommand
+class CountGreaterThanHealthCommand
+class ExecuteScriptCommand
+class ExitCommand
+class FilterStartsWithNameCommand
+class HelpCommand
+class InfoCommand
+class RemoveByIdCommand
+class RemoveGreaterCommand
+class RemoveLowerCommand
+class SaveCommand
+class ShowCommand
+class UpdateCommand
+
+class Validation
+class Arguments
+class Invoker
+
+Command <-- AddCommand
+Command <-- AddIfMinCommand
+Command <-- AverageCommand
+Command <-- ClearCommand
+Command <-- CountGreaterThanHealthCommand
+Command <-- ExecuteScriptCommand
+Command <-- ExitCommand
+Command <-- FilterStartsWithNameCommand
+Command <-- HelpCommand
+Command <-- InfoCommand
+Command <-- RemoveByIdCommand
+Command <-- RemoveGreaterCommand
+Command <-- RemoveLowerCommand
+Command <-- SaveCommand
+Command <-- ShowCommand
+Command <-- UpdateCommand
+}
+
+package Timur{
+enum AstartesCategory
+class Chapter
+class ClientData
+class Coordinates
+class Id
+class Network
+class OpenedFileSet
+class SpaceMarine
+class StreamReader
+}
+
+package Timur.Exceptions{
+class ExitException
+class NonValidFileElementException
+}
+
+@enduml
