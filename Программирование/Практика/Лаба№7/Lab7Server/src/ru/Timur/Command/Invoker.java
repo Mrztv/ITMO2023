@@ -2,40 +2,41 @@ package ru.Timur.Command;
 
 import java.io.*;
 import java.net.*;
-import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.sql.*;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.*;
 
-import com.sun.tools.javac.Main;
-import ru.Timur.Pair;
-import ru.Timur.ClientData;
-import ru.Timur.SpaceMarine;
-import ru.Timur.XML.StaxXMLReader;
+import ru.Timur.*;
 
-import ru.Timur.Command.*;
-import ru.Timur.Exceptions.CantReadFileException;
-import ru.Timur.Exceptions.EndOfFileException;
-import ru.Timur.Exceptions.NonValidFileElementException;
+public class Invoker{
 
-import javax.xml.stream.XMLStreamException;
+    private Storage storage = Storage.getStorage();
 
-public class Invoker extends Thread{
-
-    private static Storage storage = new Storage();
-
-    @Override
-    public void run() {
+    public void main() {
         String pathFile = System.getenv("FileJAVA");
+        Connection conn;
+        //db connection block start
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/studs", "s409145", "IcZHJoli85q0w5VV");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        //db connection block end
+
+        //storage.add(new SpaceMarine("Timur", new Coordinates(123, 123.45), 123.3f, false, "sa", AstartesCategory.ASSAULT, new Chapter("name", 123L), "tima"));
 
         BufferedInputStream file = null;
-        while (true){
+        /*while (true){
+            Scanner scanner;
             try{
                 if(Files.exists(Paths.get(pathFile))) {
                     if(Files.isReadable(Paths.get(pathFile))){
@@ -48,8 +49,8 @@ public class Invoker extends Thread{
                     throw new FileNotFoundException();
                 }
             }catch (FileNotFoundException | NullPointerException | CantReadFileException e){
-                System.out.println(e.toString());
-                Scanner scanner = new Scanner(System.in);
+                t.println(e.toString());
+                scanner = new Scanner(System.in);
                 System.out.println("""
                         Выберите что делать:
                         1) Ввести путь к файлу вручную
@@ -62,28 +63,7 @@ public class Invoker extends Thread{
                     return;
                 }
             }
-        }
-
-        try{
-            StaxXMLReader processor = new StaxXMLReader(file);
-            while(processor.hasNext()){
-                SpaceMarine element;
-                try {
-                    element = processor.readElement();
-                }catch (EndOfFileException e){
-                    break;
-                }
-                //System.out.println(string);
-                storage.setInputStream(file);
-                try{
-                    storage.add(element);
-                }catch (NonValidFileElementException e){
-                    System.out.println(e.toString());
-                }
-            }
-        }catch (XMLStreamException e){
-            System.out.println(e.toString());
-        }
+        }*/
 
         try {
             Selector selector = Selector.open();
@@ -97,79 +77,52 @@ public class Invoker extends Thread{
 
             dc.register(selector, SelectionKey.OP_READ);
 
+
+            ExecutorService executorService = Executors.newFixedThreadPool(20);
+
+
+            Scanner exitScanner = new Scanner(System.in);
+
             while (true) {
+                if(System.in.available() > 0){
+                    String com = exitScanner.nextLine().trim();
+                    if(com.equals("exit")){
+                        System.exit(1);
+                    } else if (com.equals("save")) {
+                        storage.save(new File(pathFile));
+                    }
+                }
                 selector.select();
                 Set<SelectionKey> keys = selector.keys();
                 Iterator<SelectionKey> iter = keys.iterator();
 
                 while (iter.hasNext()) {
                     SelectionKey key = iter.next();
-
                     if (key.isValid()) {
 
 
                         if (key.isReadable()) {
-                            try {
-
-                                DatagramChannel datagramChannel = (DatagramChannel) key.channel();
-                                ByteBuffer bf = ByteBuffer.allocate(4000);
-
-                                InetSocketAddress address = (InetSocketAddress)datagramChannel.receive(bf);
-
-                                if (bf.position() != 0) {
-                                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bf.array());
-                                    ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-                                    Command command = (Command) objectInputStream.readObject();
-                                    Pair<ClientData, InetSocketAddress> attachPair = new Pair<>();
-                                    if (command != null) {
-                                        command.setStorage(storage);
-                                        ClientData data = command.execute();
-                                        attachPair.create(data, address);
-                                    }
-
-                                    datagramChannel.register(key.selector(), SelectionKey.OP_WRITE).attach(attachPair);
-                                }
-
-                            } catch (IOException e) {
-                                System.out.println(e.toString());
-                            } catch (ClassNotFoundException e) {
-                                throw new RuntimeException(e);
-                            }
+                            DatagramChannel datagramChannel;
+                            ForkJoinPool forkJoinPool = new ForkJoinPool();
+                            datagramChannel = forkJoinPool.invoke(new ForkJoinRead(key, executorService));
+                            forkJoinPool.shutdown();
                         }
 
 
 
                         if (key.isWritable()){
-                            try{
-                                Pair<ClientData, InetSocketAddress> attachPair = (Pair<ClientData, InetSocketAddress>) key.attachment();
-                                if(attachPair != null){
+                            DatagramChannel datagramChannel;
+                            ForkJoinPool forkJoinPool = new ForkJoinPool();
+                            datagramChannel = forkJoinPool.invoke(new ForkJoinWrite(key));
+                            forkJoinPool.shutdown();
 
-                                    ClientData data = attachPair.getLeft();
-                                    InetSocketAddress address = attachPair.getRight();
 
-                                    byte[] buf = new byte[5000];
-                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                    ObjectOutputStream oos = new ObjectOutputStream(baos);
-                                    oos.writeObject(data);
-                                    buf = baos.toByteArray();
-
-                                    DatagramSocket datagramSocket = new DatagramSocket();
-                                    DatagramPacket dp = new DatagramPacket(buf, buf.length, address.getAddress(), address.getPort());
-                                    datagramSocket.send(dp);
-                                    key.channel().register(key.selector(), SelectionKey.OP_READ);
-                                }
-                            } catch (IOException e){
-                                System.out.println(e.toString());
-                            } catch (NullPointerException e){
-                                System.out.println(e.toString());
-                            }
                         }
-                    }try {
-                        Thread.sleep(500 );
-                    } catch (InterruptedException e) {
-                        String command = e.getMessage();
-                        storage.save(new File(System.getenv("FileJAVA")));
+
+
                     }
+
+
                 }
 
             }
