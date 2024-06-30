@@ -1,8 +1,6 @@
 package ru.Timur.Command;
 
-import ru.Timur.Auth;
 import ru.Timur.ClientData;
-import ru.Timur.User;
 
 /**
  * Класс для инкапсуляции команды RemoveById
@@ -11,18 +9,9 @@ import ru.Timur.User;
 public class RemoveByIdCommand implements Command {
     static final long serialVersionUID = 1L;
     private Storage storage;
-    private User user;
     private Long id;
-    private ClientData data;
     public RemoveByIdCommand(Storage storage) {
         this.storage = storage;
-    }
-    public ClientData getData() {
-        return data;
-    }
-
-    public void setData(ClientData data) {
-        this.data = data;
     }
 
     public void setId(Long id){
@@ -31,12 +20,9 @@ public class RemoveByIdCommand implements Command {
 
     @Override
     public ClientData execute(){
-        if(new Auth().inUsers(user.getName(), user.getPassword())){
-            if (storage.removeById(id, user)) {
-                return new ClientData("Удалено");
-            } else return new ClientData("Не удалено");
-        }
-        return null;
+        if (storage.removeById(id)){
+            return new ClientData("Удалено");
+        }else return new ClientData("Не удалено");
     }
 
     public void setStorage(Storage storage){

@@ -1,6 +1,5 @@
 package ru.Timur.Command;
 
-import ru.Timur.Auth;
 import ru.Timur.ClientData;
 
 import java.io.Serializable;
@@ -15,9 +14,4 @@ public interface Command extends Serializable{
     public ClientData execute();
     public String getDiscription();
     public void setStorage(Storage storage);
-    public void setData(ClientData data);
-    public  ClientData getData();
-
-
-
 }

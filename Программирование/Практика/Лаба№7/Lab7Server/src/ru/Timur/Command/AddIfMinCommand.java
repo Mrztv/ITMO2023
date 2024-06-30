@@ -1,9 +1,7 @@
 package ru.Timur.Command;
 
-import ru.Timur.Auth;
 import ru.Timur.ClientData;
 import ru.Timur.SpaceMarine;
-import ru.Timur.User;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -14,9 +12,7 @@ import java.io.Serializable;
  */
 public class AddIfMinCommand implements Command {
     static final long serialVersionUID = 1L;
-    private User user;
     private Storage storage;
-    private ClientData data;
     private SpaceMarine spaceMarine;
 
     public AddIfMinCommand(Storage storage){
@@ -25,12 +21,8 @@ public class AddIfMinCommand implements Command {
 
     @Override
     public ClientData execute() {
-
-        if(new Auth().inUsers(user.getName(), user.getPassword())){
-            if (storage.addIfMin(spaceMarine)) return new ClientData("Элемент добавлен");
-            else return new ClientData("Не добавлен");
-        }
-        return null;
+        if(storage.addIfMin(spaceMarine)) return new ClientData("Элемент добавлен");
+        else return new ClientData("Не добавлен");
     }
 
     public void setStorage(Storage storage){
@@ -39,12 +31,5 @@ public class AddIfMinCommand implements Command {
     @Override
     public String getDiscription() {
         return ("Добавить новый элемент в коллекцию, если его значение меньше, чем у наименьшего элемента этой коллекции");
-    }
-    public ClientData getData() {
-        return data;
-    }
-
-    public void setData(ClientData data) {
-        this.data = data;
     }
 }

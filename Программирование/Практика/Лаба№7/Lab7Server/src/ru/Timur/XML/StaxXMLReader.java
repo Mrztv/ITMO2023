@@ -1,180 +1,98 @@
-package ru.Timur.Command;
+package ru.Timur.XML;
 
 import ru.Timur.*;
+import ru.Timur.Exceptions.EndOfFileException;
 import ru.Timur.Exceptions.NonValidFileElementException;
-import ru.Timur.XML.StaxXMLWriter;
 
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import java.io.*;
-import java.time.ZonedDateTime;
-import java.time.chrono.ChronoZonedDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import javax.xml.stream.events.XMLEvent;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.InputMismatchException;
 
 /**
- * Класс хранилища коллекции и ресивер
- * @author timur
+ * Класс для чтения XML файла и парсинга в коллекцию
  */
-public class Storage implements Serializable {
+public class StaxXMLReader implements AutoCloseable {
+    private static final XMLInputFactory FACTORY = XMLInputFactory.newInstance();
 
-    private static final Date initializationDate = new Date();
-    static final long serialVersionUID = 1L;
-    private Set<SpaceMarine> collection = new TreeSet<>();
-    private InputStream inputStream;
+    private final XMLEventReader reader;
 
-    public void setInputStream(InputStream inputStream){
-        this.inputStream = inputStream;
-    }
-
-    public boolean add(SpaceMarine spaceMarine){
-        spaceMarine.setId(Id.incAndGet());
-        spaceMarine.setCreationDate(ZonedDateTime.now());
-        return collection.add(spaceMarine);
+    /**
+     * Задание читателя потока
+     * @param inputStream
+     * @throws XMLStreamException
+     */
+    public StaxXMLReader(InputStream inputStream) throws XMLStreamException {
+        this.reader = FACTORY.createXMLEventReader(inputStream);
     }
 
 
-    public boolean addIfMin(SpaceMarine spaceMarine){
-        Optional<SpaceMarine> collection2 = collection.stream().min((p1, p2) -> p1.getHealth().compareTo(p2.getHealth()));
-        if(spaceMarine.getHealth() < collection2.get().getHealth()){
-            return collection.add(spaceMarine);
+    /**
+     * Чтение элемента из файла и оформление его в виде {@link ru.Timur.SpaceMarine}
+     * @return элемент
+     * @throws XMLStreamException
+     */
+    public SpaceMarine readElement() throws XMLStreamException {
+        XMLEvent xmlEvent = null;
+        boolean inSpaceMarine = false;
+        while (reader.hasNext()) {
+            xmlEvent = reader.nextEvent();
+            if(xmlEvent.isStartElement()){
+                if(xmlEvent.asStartElement().getName().toString().equals("SpaceMarine")) {
+                    inSpaceMarine = true;
+                    break;
+                }
+            } else if (xmlEvent.isEndDocument()) {
+                throw new EndOfFileException();
+            }
+
         }
-        return false;
-    }
-
-    public Float averageOfHealth(){
-        return (float) collection.stream()
-                .mapToDouble(sm -> sm.getHealth())
-                .average()
-                .orElse(Double.NaN);
-    }
-
-    public void clear(){
-        collection.clear();
-    }
-
-    public long countGreaterThanHealth(Float health){
-         return collection.stream()
-            .filter(sm -> sm.getHealth() > health)
-            .count();
-    }
-
-    public void executeScript(Queue<Command> queue){
-        while(!queue.isEmpty()){
-            queue.poll().execute();
+        boolean written = false;
+        String string = "";
+        while(inSpaceMarine && reader.hasNext()){
+            xmlEvent = reader.nextEvent();
+            if(xmlEvent.isCharacters()){
+                if(!xmlEvent.asCharacters().isWhiteSpace()){
+                    written = true;
+                    string += xmlEvent.asCharacters().getData() + "\n";
+                }
+            }else if(xmlEvent.isEndElement()) {
+                if(!written){
+                    written = false;
+                    string += null + "\n";
+                }
+                if (xmlEvent.asEndElement().getName().toString().equals("SpaceMarine")) {
+                    break;
+                }
+            }else if (xmlEvent.isEndDocument()) {
+                throw new EndOfFileException();
+            }else{
+                written = false;
+            }
         }
+
+        SpaceMarine element = validation(string);
+
+        return element;
     }
 
-    public void exit(){
-        System.exit(1);
+    /**
+     * Есть ли еще элемент в файле
+     * @return true если есть
+     */
+    public boolean hasNext(){
+        return this.reader.hasNext();
     }
 
-    public Set<SpaceMarine> filterStartsWithName(String name){
-        return collection.stream()
-                .filter(p -> p.getName().startsWith(name))
-                .collect(Collectors.toSet());
-    }
-
-    public String help(){
-        Map<String, Command> commands = new HashMap<String, Command>();
-        commands.put("add", new AddCommand(this));
-        commands.put("info", new InfoCommand(this));
-        commands.put("show", new ShowCommand(this));
-        commands.put("remove_by_id", new RemoveByIdCommand(this));
-        commands.put("update", new UpdateCommand(this));
-        commands.put("help", new HelpCommand(this));
-        commands.put("exit", new ExitCommand(this));
-        commands.put("clear", new ClearCommand(this));
-        commands.put("execute_script", new ExecuteScriptCommand(this));
-        commands.put("add_if_min", new AddIfMinCommand(this));
-        commands.put("remove_greater", new RemoveGreaterCommand(this));
-        commands.put("remove_lower", new RemoveLowerCommand(this));
-        commands.put("average_of_health", new AverageOfHealthCommand(this));
-        commands.put("count_greater_than_health", new CountGreaterThanHealthCommand(this));
-        commands.put("filter_starts_with_name", new FilterStartsWithNameCommand(this));
-
-        String out = "";
-        for(Map.Entry<String, Command> elem : commands.entrySet()){
-            out += elem.getKey() + ": ";
-            out += elem.getValue().getDiscription();
-            out += '\n';
-        }
-        return out;
-    }
-
-    public String info(){
-        String out = "";
-        out += collection.getClass() + "\n";
-        out += collection.size() + "\n";
-        out += initializationDate + "\n";
-        return out;
-    }
-
-    public boolean removeById(Long id){
-        if(!collection.stream()
-                .filter(spaceMarine -> !Objects.equals(spaceMarine.getId(), id))
-                .collect(Collectors.toSet()).isEmpty()){
-            collection = collection.stream()
-                    .filter(spaceMarine -> !Objects.equals(spaceMarine.getId(), id))
-                    .collect(Collectors.toSet());
-            return true;
-        }
-        else return false;
-    }
-
-    public boolean removeGreater(Float health){
-        if(collection.equals(collection.stream()
-                .filter(spaceMarine -> spaceMarine.getHealth() < health)
-                .collect(Collectors.toSet()))) return false;
-        else {
-            collection = collection.stream()
-                    .filter(spaceMarine -> spaceMarine.getHealth() < health)
-                    .collect(Collectors.toSet());
-            return true;
-        }
-    }
-
-    public boolean removeLower(Float health){
-        if(collection.equals(collection.stream()
-                .filter(spaceMarine -> spaceMarine.getHealth() > health)
-                .collect(Collectors.toSet()))) return false;
-        else {
-            collection = collection.stream()
-                    .filter(spaceMarine -> spaceMarine.getHealth() > health)
-                    .collect(Collectors.toSet());
-            return true;
-        }
-    }
-
-    public String show(){
-        return this.collection
-                .stream()
-                .map(SpaceMarine::toString)
-                .collect(Collectors.joining("\n"));
-    }
-
-    public boolean update(SpaceMarine spaceMarine){
-        if(!collection.stream().filter(spaceMarine1 -> Objects.equals(spaceMarine1.getId(), spaceMarine.getId())).map(spaceMarine1 -> spaceMarine1 = spaceMarine).collect(Collectors.toSet()).isEmpty()){
-            collection = collection.stream().filter(spaceMarine1 -> Objects.equals(spaceMarine1.getId(), spaceMarine.getId())).map(spaceMarine1 -> spaceMarine1 = spaceMarine).collect(Collectors.toSet());
-            return true;
-        }
-        else return false;
-    }
-
-    public void save(File file){
-        try{
-            StaxXMLWriter staxXMLWriter = new StaxXMLWriter(new PrintWriter(file));
-            staxXMLWriter.writeElement(this);
-        } catch (XMLStreamException e) {
-            System.out.println(e.toString());
-        } catch (FileNotFoundException e) {
-            System.out.println(e.toString());
-        }
-    }
+    public SpaceMarine validation(String element){
+        ByteArrayInputStream bais = new ByteArrayInputStream(element.getBytes());
+        InputStream inputStream = bais;
+        StreamReader streamReader = new StreamReader(bais);
 
 
-
-
-    public SpaceMarine createElemFromInput(StreamReader streamReader) throws NoSuchElementException, IOException{
         String name = null; //Поле не может быть null, Строка не может быть пустой
         Coordinates coordinates= null; //Поле не может быть null
         Float health= null; //Поле не может быть null, Значение поля должно быть больше 0
@@ -418,16 +336,19 @@ public class Storage implements Serializable {
         }while (!successCount);
 
         chapter = new Chapter(chapterName, chapterCount);
-
+        Id.decId();
         return new SpaceMarine(name, coordinates, health, loyal, achievements, category, chapter);
-
     }
 
 
 
-    public Set<SpaceMarine> getCollection(){
-        return collection;
+    @Override
+    public void close() {
+        if (reader != null) {
+            try {
+                reader.close();
+            } catch (XMLStreamException e) { // empty
+            }
+        }
     }
-
 }
-
