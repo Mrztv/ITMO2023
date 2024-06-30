@@ -15,11 +15,6 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable {
     private Long id = Id.incAndGet(); //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     /** Поле имени*/
     private String name; //Поле не может быть null, Строка не может быть пустой
-    /**
-     * Поле для хранения Имени юзера
-     */
-    private String user;
-
     /** Поле координат
      * @see Coordinates*/
     private Coordinates coordinates; //Поле не может быть null
@@ -30,7 +25,7 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable {
     /** Поле верности*/
     private boolean loyal;
     /** Поле достижений*/
-    private     String achievements; //Поле может быть null
+    private String achievements; //Поле может быть null
     /** Поле категории*/
     private AstartesCategory category; //Поле может быть null
     /** Поле части*/
@@ -46,7 +41,7 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable {
      * @param category
      * @param chapter
      */
-    public SpaceMarine(String name, Coordinates coordinates, Float health, boolean loyal, String achievements, AstartesCategory category, Chapter chapter, String user) {
+    public SpaceMarine(String name, Coordinates coordinates, Float health, boolean loyal, String achievements, AstartesCategory category, Chapter chapter) {
         this.name = name;
         this.coordinates = coordinates;
         this.health = health;
@@ -54,7 +49,6 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable {
         this.achievements = achievements;
         this.category = category;
         this.chapter = chapter;
-        this.user = user;
     }
 
     /**
@@ -170,14 +164,6 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable {
      */
     public Chapter getChapter() {
         return chapter;
-    }
-
-    public void setUser(User user){
-        this.user = user.getName();
-    }
-
-    public String getUser() {
-        return user;
     }
 
     /**

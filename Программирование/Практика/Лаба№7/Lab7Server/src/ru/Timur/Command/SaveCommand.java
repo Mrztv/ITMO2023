@@ -1,16 +1,12 @@
 package ru.Timur.Command;
 
-import ru.Timur.Auth;
 import ru.Timur.ClientData;
-import ru.Timur.User;
 
 import java.io.File;
 
 public class SaveCommand implements Command{
     private Storage storage;
     private  String pathFile;
-    private User user;
-    private ClientData data;
 
     public SaveCommand(Storage storage, String pathFile) {
         this.storage = storage;
@@ -19,20 +15,10 @@ public class SaveCommand implements Command{
 
     @Override
     public ClientData execute() {
-        if(new Auth().inUsers(user.getName(), user.getPassword())){
-            storage.save(new File(pathFile));
-            return new ClientData("");
-        }
-        return null;
+        storage.save(new File(pathFile));
+        return new ClientData("");
     }
 
-    public ClientData getData() {
-        return data;
-    }
-
-    public void setData(ClientData data) {
-        this.data = data;
-    }
     @Override
     public String getDiscription() {
         return "Сохраняет коллекцию в файл";

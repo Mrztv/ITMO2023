@@ -1,18 +1,23 @@
 package ru.Timur;
 
-import ru.Timur.Command.DataBaseManager;
 import ru.Timur.Command.Invoker;
-import ru.Timur.Command.Storage;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.concurrent.ForkJoinPool;
+import java.io.FileInputStream;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws InterruptedException {
         Invoker invoker = new Invoker();
-        invoker.main();
+        invoker.start();
+        while(true){
+            Scanner scanner = new Scanner(System.in);
+            String com = scanner.nextLine();
+            if(com.equals("exit")){
+                invoker.interrupt();
+                System.exit(1);
+            } else if (com.equals("save")) {
+                invoker.interrupt();
+            }
+        }
     }
 }
