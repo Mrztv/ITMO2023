@@ -1,6 +1,8 @@
 package ru.Timur.Command;
 
+import ru.Timur.Auth;
 import ru.Timur.ClientData;
+import ru.Timur.User;
 
 import java.io.Serializable;
 
@@ -10,7 +12,9 @@ import java.io.Serializable;
  */
 public class ClearCommand implements Command {
     private  Storage storage;
+    private ClientData data;
     static final long serialVersionUID = 1L;
+    private User user;
 
     public ClearCommand(Storage storage) {
         this.storage = storage;
@@ -18,8 +22,18 @@ public class ClearCommand implements Command {
 
     @Override
     public ClientData execute() {
-        storage.clear();
-        return new ClientData("Коллекция очищена");
+        if(new Auth().inUsers(user.getName(), user.getPassword())){
+            storage.clear(user);
+            return new ClientData("Коллекция очищена");
+        }
+        return null;
+    }
+    public ClientData getData() {
+        return data;
+    }
+
+    public void setData(ClientData data) {
+        this.data = data;
     }
 
     public void setStorage(Storage storage){

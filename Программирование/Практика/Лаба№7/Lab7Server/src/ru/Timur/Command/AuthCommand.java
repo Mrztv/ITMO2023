@@ -3,6 +3,7 @@ package ru.Timur.Command;
 import ru.Timur.Auth;
 import ru.Timur.ClientData;
 import ru.Timur.Exceptions.NonValidFileElementException;
+import ru.Timur.Exceptions.WrongPasswordExeption;
 import ru.Timur.SpaceMarine;
 import ru.Timur.User;
 
@@ -13,39 +14,45 @@ import java.util.InputMismatchException;
  * Класс для инкапсуляции команды Add
  * @author timur
  */
-public class AddCommand implements Command{
+public class AuthCommand implements Command{
     static final long serialVersionUID = 1L;
 
     private ClientData data;
 
+    private String login;
+    private String password;
+
 
     private Storage storage;
-    private User user;
-    private SpaceMarine spaceMarine;
 
-    public AddCommand(Storage storage){
+
+    public AuthCommand(Storage storage){
         this.storage = storage;
     }
 
     @Override
     public String toString() {
-        return "AddCommand{" +
+        return "AuthCommand{" +
                 "validation=" + storage +
-                ", spaceMarine=" + spaceMarine +
                 '}';
     }
 
     @Override
     public ClientData execute() {
         try{
-            if (new Auth().inUsers(user.getName(), user.getPassword())) {
-                spaceMarine.setUser(user);
-                if (storage.add(spaceMarine)) return new ClientData("Элемент добавлен");
-                else return new ClientData("Не добавлен");
-            } else return null;
-        } catch (NonValidFileElementException e){
-            return new ClientData("неверный логин или пароль");
+
+            Auth auth = new Auth();
+            if(auth.inUsers(login, password)){
+                return new ClientData("Вы вошли");
+            }
+            else{
+                auth.createNewUser(login, password);
+                return new ClientData("Юзер создан");
+            }
+        } catch (WrongPasswordExeption e){
+            return new ClientData("Wrong password");
         }
+
     }
 
     public void setStorage(Storage storage){
@@ -60,8 +67,6 @@ public class AddCommand implements Command{
     public ClientData getData() {
         return data;
     }
-
-
 
     public void setData(ClientData data) {
         this.data = data;
