@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ce58cbcb-188d-494f-89f6-b8031aa2fceb" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/out/production/Lab7Client/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/out/production/Lab7Client/ru/Timur/Scripts/sc1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/out/production/Lab7Client/ru/Timur/Scripts/sc2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/AstartesCategory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Chapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/ClientData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/AddCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/AddIfMinCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/Arguments.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/AuthCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/AverageOfHealthCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/ClearCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/Command.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/CountGreaterThanHealthCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/ExecuteScriptCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/ExitCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/FilterStartsWithNameCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/HelpCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/InfoCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/Invoker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/RemoveByIdCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/RemoveGreaterCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/RemoveLowerCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/ShowCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/UpdateCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Command/Validation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Coordinates.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Exceptions/ExitException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Exceptions/NonValidFileElementException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/ExecuteQueue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Id.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/MainTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Network.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/OpenedFileSet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Scripts/sc1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/Scripts/sc2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/SpaceMarine.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/StreamReader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/Lab7Client/src/ru/Timur/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/demo/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/demo/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/demo/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/demo/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/demo/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/demo/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/demo/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/demo/src/main/java/module-info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/demo/src/main/java/org/example/demo/HelloApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/demo/src/main/java/org/example/demo/HelloController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Лаба№7/demo/src/main/resources/org/example/demo/hello-view.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/AstartesCategory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Chapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/ClientData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/AddCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/AddIfMinCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/Arguments.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/AuthCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/AverageOfHealthCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/ClearCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/Command.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/CountGreaterThanHealthCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/ExecuteScriptCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/ExitCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/FilterStartsWithNameCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/HelpCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/InfoCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/Invoker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/RemoveByIdCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/RemoveGreaterCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/RemoveLowerCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/ShowCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/UpdateCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Command/Validation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Coordinates.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Exceptions/ExitException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Exceptions/NonValidFileElementException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/ExecuteQueue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Id.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/MainTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Network.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/OpenedFileSet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Scripts/sc1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/Scripts/sc2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/SpaceMarine.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/StreamReader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Client/src/ru/Timur/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/lab8clienttest/HelloApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/lab8clienttest/HelloController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/org/example/lab8clienttest/hello-view.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab8Server/.idea/libraries/postgresql_42_7_31.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Use Maven wrapper" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="2ib1sQibIr5L0lqKqmFGWJ8lA2P" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.HelloApplication.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.keymap"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-17.0.10-graalvm-jdk-17.0.10-3183f394aec4-6e2c94c7" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ce58cbcb-188d-494f-89f6-b8031aa2fceb" name="Changes" comment="" />
+      <created>1719744671273</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1719744671273</updated>
+    </task>
+    <servers />
+  </component>
+</project>
