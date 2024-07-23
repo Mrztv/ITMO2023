@@ -11,6 +11,8 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Scanner;
+
+import ru.Timur.Exceptions.WrongPasswordExeption;
 import ru.Timur.Network;
 import ru.Timur.User;
 
@@ -24,7 +26,7 @@ public class AuthCommand implements Command {
     public AuthCommand() {
         try {
             //this.network = new Network(65125, InetAddress.getLocalHost());
-            network = new Network(9999, InetAddress.getLocalHost());
+            network = new Network(InetAddress.getLocalHost());
         } catch (UnknownHostException var2) {
             throw new RuntimeException(var2);
         }
@@ -48,15 +50,15 @@ public class AuthCommand implements Command {
             this.network.send(baos);
             User.getUser().setUser(this.login, this.password);
             this.network.recive();
-        } catch (IOException var4) {
-            throw new RuntimeException(var4);
+        } catch (IOException | WrongPasswordExeption e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void auth(String _login, String _password) {
+    public void auth(String _login, String _password) throws IOException, WrongPasswordExeption {
         try {
             if(!_login.isEmpty() || !_login.isBlank()){
-                login = login;
+                login = _login;
             }
 
             if(!_password.isEmpty() || !_password.isBlank()){
@@ -69,8 +71,8 @@ public class AuthCommand implements Command {
             this.network.send(baos);
             User.getUser().setUser(this.login, this.password);
             this.network.recive();
-        } catch (IOException var4) {
-            throw new RuntimeException(var4);
+        } catch (IOException | WrongPasswordExeption e) {
+            throw e;
         }
     }
 

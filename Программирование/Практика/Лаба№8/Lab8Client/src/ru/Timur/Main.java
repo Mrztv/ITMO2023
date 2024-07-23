@@ -25,8 +25,8 @@ public class Main {
 
         while(true) {
             try {
-                Invoker invoker = new Invoker(System.in);
-                invoker.readStream(new Validation());
+                Invoker invoker = new Invoker(System.in, new Validation());
+                invoker.readStream();
             } catch (RuntimeException var2) {
                 System.out.println(var2.toString());
             }

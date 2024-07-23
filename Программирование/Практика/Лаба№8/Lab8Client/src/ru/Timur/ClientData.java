@@ -33,10 +33,17 @@ public class ClientData implements Serializable {
         } else {
             System.out.println("ERR");
         }
-
     }
 
     public String getOut() {
         return this.out;
+    }
+
+    public int getVariant() {
+        return variant;
+    }
+
+    public Set<SpaceMarine> getCollection() {
+        return collection;
     }
 }

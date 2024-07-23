@@ -14,21 +14,27 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
+
+import ru.Timur.Exceptions.WrongPasswordExeption;
 import ru.Timur.ExecuteQueue;
 import ru.Timur.Network;
 import ru.Timur.StreamReader;
 import ru.Timur.Exceptions.ExitException;
 
 public class Invoker {
-    static Map<String, Command> commands;
+    public static Map<String, Command> commands;
+
+    private final Validation validation;
+
+    private static final int port = 9999;
     private InputStream inputStream;
 
-    public Invoker(InputStream inputStream) {
+    public Invoker(InputStream inputStream, Validation validation) {
         this.inputStream = inputStream;
         StreamReader.changeStreamReader(inputStream);
-    }
 
-    public void readStream(Validation validation) throws RuntimeException {
+        this.validation = validation;
+
         commands = new HashMap();
         commands.put("add", new AddCommand(validation));
         commands.put("info", new InfoCommand(validation));
@@ -46,6 +52,9 @@ public class Invoker {
         commands.put("count_greater_than_health", new CountGreaterThanHealthCommand(validation));
         commands.put("filter_starts_with_name", new FilterStartsWithNameCommand(validation));
 
+    }
+
+    public void readStream() throws RuntimeException {
         try {
             while(true) {
                 String input;
@@ -71,7 +80,7 @@ public class Invoker {
                 }
 
                 if (commands.containsKey(words[0])) {
-                    Network network = new Network(65125, InetAddress.getLocalHost());
+                    Network network = new Network(InetAddress.getLocalHost());
                     if (words[0] == "exit") {
                         validation.exit();
                     }
@@ -81,12 +90,17 @@ public class Invoker {
                         ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
                         objectOutputStream.writeObject(commands.get(words[0]));
                         network.send(byteArrayOutputStream);
-                        network.recive();
+
+                        try {
+                            network.recive();
+                        } catch (WrongPasswordExeption e){
+                            System.out.println(e);
+                        }
                     }
 
                     Arguments.clearArgs();
                 } else if (this.inputStream != System.in) {
-                    throw new RuntimeException("Неправильная комманда");
+                    throw new RuntimeException("Неправильная команда");
                 }
             }
         } catch (NoSuchElementException var7) {

@@ -8,6 +8,7 @@ package ru.Timur;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class SpaceMarine implements Comparable<SpaceMarine>, Serializable {
     static final long serialVersionUID = 1L;
@@ -20,7 +21,7 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable {
     private String achievements;
     private AstartesCategory category;
     private Chapter chapter;
-
+    private String user;
     public SpaceMarine(String name, Coordinates coordinates, Float health, boolean loyal, String achievements, AstartesCategory category, Chapter chapter) {
         this.name = name;
         this.coordinates = coordinates;
@@ -63,7 +64,7 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable {
         this.chapter = chapter;
     }
 
-    public Long getId() {
+    public long getId() {
         return this.id;
     }
 
@@ -95,12 +96,19 @@ public class SpaceMarine implements Comparable<SpaceMarine>, Serializable {
         return this.chapter;
     }
 
+    public ZonedDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
     public int compareTo(SpaceMarine spaceMarine) {
         return this.id.compareTo(spaceMarine.id);
     }
 
     public String toString() {
-        Long var10000 = this.id;
-        return "SpaceMarine{id=" + var10000 + ", name='" + this.name + "', coordinates=" + this.coordinates.toString() + ", creationDate=" + this.creationDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy - HH:mm:ss z")) + ", health=" + this.health + ", loyal=" + this.loyal + ", achievements='" + this.achievements + "', category=" + this.category + ", chapter=" + this.chapter.toString() + "}";
+        return "SpaceMarine{id=" + this.id + ", user='" + this.user + ", name='" + this.name + "', coordinates=" + this.coordinates.toString() + ", creationDate=" + this.creationDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy - HH:mm:ss z")) + ", health=" + this.health + ", loyal=" + this.loyal + ", achievements='" + this.achievements + "', category=" + this.category + ", chapter=" + this.chapter.toString() + "}";
     }
 }

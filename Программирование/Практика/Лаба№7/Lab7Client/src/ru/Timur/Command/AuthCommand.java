@@ -23,7 +23,7 @@ public class AuthCommand implements Command {
 
     public AuthCommand() {
         try {
-            this.network = new Network(65125, InetAddress.getLocalHost());
+            this.network = new Network(9999, InetAddress.getLocalHost());
         } catch (UnknownHostException var2) {
             throw new RuntimeException(var2);
         }

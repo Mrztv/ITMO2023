@@ -30,4 +30,8 @@ public class User implements Serializable {
     public boolean isSet() {
         return this.set;
     }
+
+    public String getUserName(){
+        return this.name;
+    }
 }

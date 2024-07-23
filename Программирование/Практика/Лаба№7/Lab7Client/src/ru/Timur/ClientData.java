@@ -17,15 +17,9 @@ public class ClientData implements Serializable {
     private String out;
     private Number number;
 
-    public ClientData() {
-    }
-
     public void write() {
         if (this.variant == 1) {
-            Set var10000 = this.collection;
-            PrintStream var10001 = System.out;
-            Objects.requireNonNull(var10001);
-            var10000.forEach(var10001::println);
+            this.collection.forEach(System.out::println);
         } else if (this.variant == 2) {
             System.out.println(this.out);
         } else if (this.variant == 3) {

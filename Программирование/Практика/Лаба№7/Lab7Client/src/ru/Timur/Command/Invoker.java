@@ -71,7 +71,7 @@ public class Invoker {
                 }
 
                 if (commands.containsKey(words[0])) {
-                    Network network = new Network(65125, InetAddress.getLocalHost());
+                    Network network = new Network(9999, InetAddress.getLocalHost());
                     if (words[0] == "exit") {
                         validation.exit();
                     }
